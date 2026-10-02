@@ -1,0 +1,16 @@
+# local environments and OS files
+venv/
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+.env.*
+
+# generated data and trained models (rebuild with the scripts below)
+live_pipeline/data/
+live_pipeline/models/
+historical_study/data/
+historical_study/logs/
+*.pkl
+*.log

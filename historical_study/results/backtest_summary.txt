@@ -1,0 +1,35 @@
+
+RUSSELL 2000 RECONSTITUTION BACKTEST SUMMARY (2000-2025)
+========================================================
+
+YEARS ANALYZED: 26
+
+TRADE PERFORMANCE:
+  - Years with positive addition runup: 16 / 26 (61.5%)
+  - Years with low VIX regime (<median): 13 / 26 (50.0%)
+  
+BEST AND WORST YEARS:
+  - Best year: 2000 with combined edge of 11.60%
+  - Worst year: 2008 with combined edge of -6.70%
+  - Note: 2022 was BEAR regime with significant losses
+  
+PERFORMANCE BY REGIME:
+  - BULL years: avg edge = 3.17%
+  - BEAR years: avg edge = -4.81%
+  - NEUTRAL years: avg edge = 1.26%
+  
+MACRO REGIME FILTER:
+  - Win rate in BEAR regime: 0.0%
+  - Note: regime is the 60-day RUT return ending on the effective date, which overlaps the edge window, so this split is partly circular
+  
+STRATEGY METRICS:
+  - Total cumulative edge: 19.63%
+  - Average edge per year: 0.76%
+  - t-stat of mean annual edge: 0.89  (annual returns of the index itself, not a trade)
+  - Average momentum entering recon: 1.31%
+  
+CAVEATS:
+  The 'edge' is the Russell 2000 index return from the preliminary list date to the
+  effective date. It is not a measured trade in the added or deleted names. With a
+  small sample of annual observations, treat any difference between regimes as a
+  description of these years and not as a tested rule.
