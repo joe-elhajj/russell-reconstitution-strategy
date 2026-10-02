@@ -2,7 +2,7 @@
 
 Every June, FTSE Russell reshuffles its indexes. Companies that outgrew the Russell 2000 move out, smaller ones move in, and every fund that tracks the index has to make those trades by the effective date, whatever the price. The preliminary lists come out in late May, so anyone can see the buying and selling coming weeks ahead.
 
-This repo is my attempt to find out whether that predictable flow leaves a footprint in prices, and whether the broader market backdrop changes how much you should trust it. It covers two things: a daily brief for the June 26, 2026 reconstitution, and a backtest of past years. It is a research project. None of it is investment advice, and the results are backtests, not live trading.
+I built this as a research project for a summer trading competition. The question was whether that predictable flow leaves a footprint in prices, and whether the broader market backdrop changes how much you should trust it. It covers two things: a daily brief for the June 26, 2026 reconstitution, and a backtest of past years. None of it is investment advice, and the results are backtests, not live trading.
 
 ## What's in here
 
@@ -14,11 +14,22 @@ The second is a historical study in `historical_study/`. It goes back through ea
 
 ## A quick check on the model
 
-To make sure the pipeline holds together end to end, I ran the trained classifier over 2025, a year it never saw in training. It held a full position on bullish signals, half on neutral ones and nothing on bearish ones, with no trading costs.
+To make sure the pipeline holds together end to end, I ran the trained classifier over 2025, a year it never saw in training. It held a full position on bullish signals, half on neutral ones and nothing on bearish ones. The chart below is gross of costs.
 
 ![2025 out-of-sample equity curve](docs/oos_2025_equity_curve.png)
 
-Over that year the strategy finished around 114.9k from a 100k start, while simply holding the index finished around 109.3k. That is one year, tested once, with no costs or slippage, so I treat it as a sanity check on the code and not as evidence that the approach works.
+Over that year the strategy finished around 114.9k from a 100k start, while simply holding the index finished around 109.3k. That is a gross return of 14.9% against 9.3% for buy and hold, before any trading costs.
+
+The strategy changed position 72 times in 230 trading days, about 79 units of one-way turnover (a unit is a full move between flat and fully invested), so costs matter. I repriced the saved daily positions with a flat cost per unit traded, applied on each position change, with cash earning nothing:
+
+| Cost per unit traded | Net return | Sharpe | Net vs buy and hold |
+|---|---|---|---|
+| 0 bps | 14.9% | 0.87 | +5.6 pts |
+| 2 bps | 13.3% | 0.79 | +3.9 pts |
+| 5 bps | 10.8% | 0.67 | +1.5 pts |
+| 10 bps | 6.9% | 0.48 | -2.4 pts |
+
+The edge over buy and hold disappears at about 7 bps per unit traded, and the return itself reaches zero near 19 bps. Those cost levels are assumptions, not measured spreads. I did not model spread, impact or fills from real quotes. It is also one year, tested once, so I treat it as a sanity check on the code and not as evidence that the approach works.
 
 ## Running it
 
@@ -78,7 +89,11 @@ The historical study has data issues. Its results cover 25 years, 2000 through 2
 
 The Monte Carlo draws from hand-set expected returns and volatilities for each trade bucket (see `monte_carlo.py`) on a notional $1,000,000, so its output reflects those assumptions and not realized trading.
 
-The classifier trains on 2010 to 2024 with no separate validation split, which makes the 2025 run the only held-out test. No transaction costs, borrow costs or market impact are modeled. And the candidate lists are tied to the June 26, 2026 reconstitution.
+The classifier trains on 2010 to 2024 with no separate validation split, which makes the 2025 run the only held-out test. The simulation itself models no transaction costs, borrow costs or market impact, and the cost table above is a repricing of saved positions, not a rerun with a cost model.
+
+The cost problem is larger for the candidate trades than for the index-level run. The model trades the index, which is cheap to execute through a liquid ETF or futures. The additions and deletions are small and micro caps, where a round trip (spread plus market impact, plus borrow on shorts) can plausibly cost 1% to 3%. That is the same size as the 1.1% to 2.0% per-trade edges hard-coded into the Monte Carlo. No backtest of those baskets exists, so whether any edge survives costs is untested. Until it is tested net of realistic costs, the candidate trades should be read as unproven.
+
+The 2022 to 2023 equity curve I had saved is not shown. It sits inside the 2010 to 2024 training window, so it is in-sample. It also shows only about a 1% gross gain over two years, which costs would remove at a few basis points. And the candidate lists are tied to the June 26, 2026 reconstitution.
 
 ## Related
 
