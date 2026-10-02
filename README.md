@@ -76,10 +76,10 @@ docs/                       figures used in this README
 
 ## Limitations
 
-- One held-out year (2025). The classifier trains on 2010 to 2024 with no separate validation split. Costs above are a flat repricing, with no modeled spread, impact or borrow.
-- The small-cap candidate trades have no backtest. Plausible round-trip costs of 1% to 3% are the same size as the 1.1% to 2.0% per-trade edges set by hand in the Monte Carlo.
-- The historical study had a column-labeling bug (series named by position instead of ticker), now corrected. The rest of it is not audited. Its "edge" is the index return from preliminary list to effective date (0.76% average, t-statistic 0.9), not the added or deleted names.
-- Candidate lists are the hard-coded June 26, 2026 lists.
+- One held-out year (2025) and no validation split. Costs are a flat repricing, not modeled spread or impact.
+- The small-cap candidate trades are not backtested. Round-trip costs of 1% to 3% could absorb the assumed 1% to 2% edges.
+- The historical study had a column-labeling bug, now corrected. The rest is unaudited, and it measures the index, not the added names.
+- Candidate lists are hard-coded to the June 26, 2026 reconstitution.
 
 ## Related
 
