@@ -80,7 +80,3 @@ docs/                       figures used in this README
 - The small-cap candidate trades are not backtested. Round-trip costs of 1% to 3% could absorb the assumed 1% to 2% edges.
 - The historical study had a column-labeling bug, now corrected. The rest is unaudited, and it measures the index, not the added names.
 - Candidate lists are hard-coded to the June 26, 2026 reconstitution.
-
-## Related
-
-I also have a separate project on the variance risk premium (VIX against forward realized volatility) that lives outside this repo.
