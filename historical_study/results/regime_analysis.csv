@@ -1,6 +1,6 @@
 ,pattern_1_additions_runup,pattern_1_additions_runup,pattern_1_additions_runup,pattern_2_vix_regime,pattern_2_vix_regime,pattern_3_post_recon_reversal,pattern_3_post_recon_reversal
 ,mean,std,count,mean,std,mean,std
 regime,,,,,,,
-BEAR,-3.705,8.461,7,1297.996,525.838,-0.246,0.986
-BULL,5.522,7.04,10,1324.399,883.384,0.815,2.103
-NEUTRAL,1.519,4.165,8,987.393,719.333,0.022,1.995
+BEAR,-4.812,1.466,5,22.767,8.071,-0.257,1.792
+BULL,3.171,3.708,9,20.91,7.098,0.186,1.551
+NEUTRAL,1.262,3.527,12,15.912,3.243,-0.426,1.462

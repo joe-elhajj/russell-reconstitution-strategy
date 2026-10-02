@@ -1,9 +1,9 @@
 
 Monte Carlo Summary
 Total simulations: 100000
-Best multiplier: 1.75
-25/50/75 percentiles (final value): 999535.95, 1001580.31, 1003631.46
-Probability of profit: 0.699
+Best multiplier: 0.5
+25/50/75 percentiles (final value): 999866.83, 1000450.67, 1001039.98
+Probability of profit: 0.698
 Probability of losing >5%: 0.000
-Worst 1% value: 994560.66
-Sharpe proxy: 0.523
+Worst 1% value: 998432.10
+Sharpe proxy: 0.521
