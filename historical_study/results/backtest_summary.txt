@@ -1,0 +1,35 @@
+
+RUSSELL 2000 RECONSTITUTION BACKTEST SUMMARY (1989-2025)
+========================================================
+
+YEARS ANALYZED: 25
+
+TRADE PERFORMANCE:
+  - Years with positive addition runup: 13 / 25 (52.0%)
+  - Years with low VIX regime (<median): 12 / 25 (48.0%)
+  
+BEST AND WORST YEARS:
+  - Best year: 2005 with combined edge of 15.41%
+  - Worst year: 2017 with combined edge of -13.63%
+  - Note: 2022 was BEAR regime with significant losses
+  
+PERFORMANCE BY REGIME:
+  - BULL years: avg edge = 5.52%
+  - BEAR years: avg edge = -3.71%
+  - NEUTRAL years: avg edge = 1.52%
+  
+MACRO REGIME FILTER:
+  - Win rate in BEAR regime: 28.6%
+  - Interpretation: Regime filter adds value - cut size in BEAR
+  
+STRATEGY METRICS:
+  - Total cumulative edge: 41.43%
+  - Average edge per year: 1.66%
+  - Sharpe ratio (proxy): 5.53
+  - Average momentum entering recon: 10.22%
+  
+KEY FINDING:
+  The reconstitution window generates measurable edge. Higher volatility regimes
+  (measured by VIX entering the window) correlate with different outcomes. The macro
+  regime filter helps avoid outsized losses in BEAR years like 2022.
+  Suggest: Size up additions in BULL with low VIX, reduce by 50% in BEAR regimes.
