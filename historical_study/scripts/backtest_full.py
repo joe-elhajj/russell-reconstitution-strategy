@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Russell 2000 Reconstitution Backtest (1989-2025)
+Russell 2000 Reconstitution Backtest (2000-2025)
 Full parallel backtest with regime classification and pattern measurement.
 Designed for high-performance compute clusters using joblib Parallel.
 
@@ -99,8 +99,9 @@ def download_year_data(year: int) -> bool:
         # Handle MultiIndex columns (returned when downloading multiple tickers)
         if isinstance(df_all.columns, pd.MultiIndex):
             # Columns are (Price Type, Ticker), extract Close prices
-            close_prices = df_all['Close']
-            close_prices.columns = TICKERS  # Ensure ticker names match
+            # Select by ticker name. yfinance returns columns sorted alphabetically,
+            # so assigning TICKERS positionally mislabels every series.
+            close_prices = df_all['Close'][TICKERS]
         else:
             # Single ticker case (shouldn't happen with our list, but handle it)
             close_prices = pd.DataFrame(df_all['Close'])
@@ -125,7 +126,7 @@ def download_year_data(year: int) -> bool:
             combined['^RUT_Volume'] = rut_volume
         
         # Forward fill then backward fill for missing data
-        combined = combined.fillna(method='ffill').fillna(method='bfill')
+        combined = combined.ffill().bfill()
         
         if combined.empty:
             log_progress(f'Error: Downloaded data is empty', year)
@@ -533,10 +534,11 @@ def generate_summary_report(df_patterns: pd.DataFrame):
         # Average RUT return (simplified from pattern_6)
         avg_momentum = df_patterns['pattern_6_momentum_factor'].mean()
         
+        tstat = (df_patterns['combined_edge'].mean() / (df_patterns['combined_edge'].std() / len(df_patterns) ** 0.5)) if df_patterns['combined_edge'].std() > 0 else 0
         sharpe_ratio = (cumulative_strategy / df_patterns['combined_edge'].std()) if df_patterns['combined_edge'].std() > 0 else 0
         
         report = f"""
-RUSSELL 2000 RECONSTITUTION BACKTEST SUMMARY (1989-2025)
+RUSSELL 2000 RECONSTITUTION BACKTEST SUMMARY (2000-2025)
 ========================================================
 
 YEARS ANALYZED: {total_years}
@@ -557,19 +559,19 @@ PERFORMANCE BY REGIME:
   
 MACRO REGIME FILTER:
   - Win rate in BEAR regime: {bear_win_rate:.1f}%
-  - Interpretation: {'Regime filter adds value - cut size in BEAR' if bear_win_rate < 50 else 'Filter ineffective - consider always long'}
+  - Note: regime is the 60-day RUT return ending on the effective date, which overlaps the edge window, so this split is partly circular
   
 STRATEGY METRICS:
   - Total cumulative edge: {cumulative_strategy:.2f}%
   - Average edge per year: {cumulative_strategy/total_years:.2f}%
-  - Sharpe ratio (proxy): {sharpe_ratio:.2f}
+  - t-stat of mean annual edge: {tstat:.2f}  (annual returns of the index itself, not a trade)
   - Average momentum entering recon: {avg_momentum:.2f}%
   
-KEY FINDING:
-  The reconstitution window generates measurable edge. Higher volatility regimes
-  (measured by VIX entering the window) correlate with different outcomes. The macro
-  regime filter helps avoid outsized losses in BEAR years like 2022.
-  Suggest: Size up additions in BULL with low VIX, reduce by 50% in BEAR regimes.
+CAVEATS:
+  The 'edge' is the Russell 2000 index return from the preliminary list date to the
+  effective date. It is not a measured trade in the added or deleted names. With a
+  small sample of annual observations, treat any difference between regimes as a
+  description of these years and not as a tested rule.
 """
         
         output_path = RESULTS_DIR / 'backtest_summary.txt'
@@ -668,7 +670,7 @@ def generate_charts(df_patterns: pd.DataFrame):
                   fontsize=11, title='Regime', title_fontsize=12)
         
         # Main title
-        fig.suptitle('Russell 2000 Reconstitution Backtest Analysis (1989-2025)',
+        fig.suptitle('Russell 2000 Reconstitution Backtest Analysis (2000-2025)',
                     fontsize=14, fontweight='bold', y=0.995)
         
         output_path = RESULTS_DIR / 'backtest_chart.png'
